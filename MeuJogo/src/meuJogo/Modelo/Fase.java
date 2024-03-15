@@ -60,7 +60,7 @@ public class Fase extends JPanel implements ActionListener {
 		stars = new ArrayList<Stars>();
 		
 		for (int i = 0; i < cordenadas.length; i++) {
-			int x = (int)(Math.random()*1050+1024);
+			int x = (int)(Math.random()*1024+0);
 			int y = (int)(Math.random()*768+0);
 			stars.add(new Stars(x, y));
 		}
@@ -105,6 +105,14 @@ public class Fase extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		player.update();
+
+		if(player.isTurbo()) {
+			timer.setDelay(2);
+		}
+		if(player.isTurbo()== false) {
+			timer.setDelay(5);
+		}
+		
 		
 		for (int q = 0; q < stars.size(); q++) {
 			Stars on = stars.get(q);
@@ -119,8 +127,13 @@ public class Fase extends JPanel implements ActionListener {
 		for (int p = 0; p < tiros.size(); p++) {
 			Tiro m = tiros.get(p);
 			if (m.isVisivel()){
-				
 				m.update();
+				if(player.isTurbo()) {
+					tiros.get(p).setVELOCIDADE(-1);
+				}
+				if(player.isTurbo()== false) {
+					tiros.get(p).setVELOCIDADE(2);
+				}
 			}
 			else {
 				tiros.remove(p);
@@ -151,9 +164,14 @@ public class Fase extends JPanel implements ActionListener {
 			Enemy1 tempEnemy1 = enemy1.get(i);
 			formaEnemy1 = tempEnemy1.getBounds();
 			if(formaNave.intersects(formaEnemy1)) {
-				player.setVisivel(false);
-				tempEnemy1.setVisivel(false);
-				emJogo = false;
+				if(player.isTurbo()) {
+					tempEnemy1.setVisivel(false);		
+				}else {
+					player.setVisivel(false);
+					tempEnemy1.setVisivel(false);	
+					emJogo = false;
+				}
+
 			}
 		}
 		
